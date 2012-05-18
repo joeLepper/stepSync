@@ -1,0 +1,499 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Step Sync - a web audio experiment by Joe Lepper</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen">	
+    <link href='http://fonts.googleapis.com/css?family=Oswald:400,300,700' rel='stylesheet' type='text/css'>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <!--script type="text/javascript" src="js/jquery-ui-1.8.20.custom.min.js"></script-->
+	<script type="text/javascript" src="js/scheduler.js"></script>
+    <script type="text/javascript" src="js/bufferLoaderCompiled.js"></script>
+    <script type="text/javascript" src="js/buttonFunctions.js"></script>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <!--GOOGLE-->
+	<script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-30194012-1']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    
+    </script>
+</head>
+
+  <body>
+      <div class="blocker"></div>
+      <div class="overlay">
+      	<p class="overlayText" id="overlayHead"><b>Welcome to Step Sync.</b></p>
+        <p class="overlayText">Step Sync is a browser-based interactive audio sequencer. It allows you to program, play and manipulate audio loops in real-time.</p>
+        <p class="overlayText">Each row on the Loop Sequencing screen will let you maniplulate the sequencing, loop length, volume and FX send of a an audio loop.</p>
+        <p class="overlayText">Click the buttons in the column to the left to enter "Edit Mode," where you can edit that row's sequence and FX levels.</p>
+        <div id="dismissWrapper"><button id="dismiss" class="dismiss">OK!</button></div>
+      </div>
+        <div class="container">
+            <h1>Step Sync</h1>
+            <!--p>by Joe Lepper</p-->
+            <div class="button-collection">
+<!--programming grid-->                    
+                    <ul class="column" id="drumPattern1" muted="true">
+                		<div class="row">
+                            <li class="columnLabels"><p class="verticalLabels"></p></li>
+                            <li class="columnLabels"><p class="verticalLabels"></p></li>
+                            <li class="columnLabels"><p class="verticalLabels"></p></li>
+                            <li class="sliderColumnLabel"><p class="verticalLabels"></p></li>
+                            <li class="gridSpacer"><p class="verticalLabels"></p></li>
+                        </div>
+                        <div class="row">
+                            <li class="effectsBoxSpacer3"><br/><p id="fxOn" class="horizontalLabels">Effects:</p></li>
+                            <li class="effectPad"><button id="fx3" class="fx f"/></li>
+                            <li class="punchPad"><button id="a0" class="punch a"/></li>
+                            <li class="punchPad"><button id="a1" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a2" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a3" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a4" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a5" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a6" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a7" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a8" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a9" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a10" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a11" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a12" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a13" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a14" class="punch a"/> </li>
+                            <li class="punchPad"><button id="a15" class="punch a"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="effectsBoxSpacer"><br/><p id="delayOn" class="horizontalLabels">Delay:</p><br/><p id="delayTime" class="horizontalLabels">Delay Time:</p><br/><p id="delayFeedback" class="horizontalLabels">Delay Feedback:</p></li>
+                            <li class="effectPad"><button id="fx0" class="fx f"/></li>
+                            <li class="punchPad"><button id="b0" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b1" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b2" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b3" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b4" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b5" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b6" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b7" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b8" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b9" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b10" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b11" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b12" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b13" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b14" class="punch b"/> </li>
+                            <li class="punchPad"><button id="b15" class="punch b"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="delayTime"/></li>
+                            <li class="punchPad"><button id="c0" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c1" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c2" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c3" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c4" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c5" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c6" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c7" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c8" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c9" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c10" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c11" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c12" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c13" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c14" class="punch c"/> </li>
+                            <li class="punchPad"><button id="c15" class="punch c"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="delayFeedbackGain"/></li>
+                            <li class="punchPad"><button id="d0" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d1" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d2" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d3" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d4" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d5" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d6" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d7" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d8" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d9" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d10" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d11" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d12" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d13" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d14" class="punch d"/> </li>
+                            <li class="punchPad"><button id="d15" class="punch d"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="effectsBoxSpacer"><br/><p id="filterOn" class="horizontalLabels">Filter:</p><br/><p id="filterFrequency" class="horizontalLabels">Freq:</p><br/><p id="filterQ" class="horizontalLabels">Q:</p></li>
+                            <li class="effectPad"><button id="fx1" class="fx f"/></li>
+                            <li class="punchPad"><button id="e0" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e1" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e2" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e3" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e4" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e5" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e6" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e7" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e8" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e9" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e10" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e11" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e12" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e13" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e14" class="punch e"/> </li>
+                            <li class="punchPad"><button id="e15" class="punch e"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="sliderPad"><input type="range" min="0.01" max="0.99" step="0.01" class="filterFreq"/></li>
+                            <li class="punchPad"><button id="f0" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f1" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f2" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f3" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f4" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f5" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f6" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f7" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f8" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f9" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f10" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f11" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f12" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f13" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f14" class="punch f"/> </li>
+                            <li class="punchPad"><button id="f15" class="punch f"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="sliderPad"><input type="range" min="0" max="10" step="0.01" class="filterQ"/></li>
+                            <li class="punchPad"><button id="g0" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g1" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g2" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g3" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g4" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g5" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g6" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g7" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g8" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g9" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g10" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g11" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g12" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g13" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g14" class="punch g"/> </li>
+                            <li class="punchPad"><button id="g15" class="punch g"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="effectsBoxSpacer2"><br/><p id="overdriveOn" class="horizontalLabels">Overdrive:</p><br/><p id="overdriveFeedback" class="horizontalLabels">Amount:</p></li>
+                            <li class="effectPad"><button id="fx2" class="fx f"/></li>
+                            <li class="punchPad"><button id="h0" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h1" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h2" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h3" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h4" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h5" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h6" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h7" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h8" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h9" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h10" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h11" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h12" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h13" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h14" class="punch h"/> </li>
+                            <li class="punchPad"><button id="h15" class="punch h"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="sliderPad"><input type="range" min="0.8" max="0.95" step="0.001" class="overdriveFeedback"/></li>
+                            <li class="punchPad"><button id="i0" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i1" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i2" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i3" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i4" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i5" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i6" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i7" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i8" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i9" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i10" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i11" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i12" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i13" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i14" class="punch i"/> </li>
+                            <li class="punchPad"><button id="i15" class="punch i"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="spacer"></li>
+                            <li class="sliderSpacer"></li>
+                            <li class="punchPad"><button id="j0" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j1" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j2" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j3" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j4" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j5" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j6" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j7" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j8" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j9" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j10" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j11" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j12" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j13" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j14" class="punch j"/> </li>
+                            <li class="punchPad"><button id="j15" class="punch j"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="switchPad2"><p class="verticalLabels">BACK</p></li>
+                            <li class="switchPad2"><p class="verticalLabels">PLAY</p></li>
+                            <li class="switch_playSpacer"></li>
+                            <li class="punchPad"><button id="k0" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k1" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k2" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k3" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k4" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k5" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k6" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k7" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k8" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k9" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k10" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k11" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k12" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k13" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k14" class="punch k"/> </li>
+                            <li class="punchPad"><button id="k15" class="punch k"/> </li>
+                        </div>
+                		<div class="row">
+                            <li class="switchPad"><button id="switcher0" class="switcher0 a"/></li>
+                            <li class="playPad"><button id="playPause2" class="playPause"/></li>
+                            <li class="switch_playSpacer2"></li>
+                            <li class="punchPad"><button id="l0" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l1" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l2" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l3" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l4" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l5" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l6" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l7" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l8" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l9" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l10" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l11" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l12" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l13" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l14" class="punch l"/> </li>
+                            <li class="punchPad"><button id="l15" class="punch l"/> </li>
+                        </div>
+                        <!--li class="spacer"></li-->
+                        
+                    </ul>
+<!--sequencing grid-->                    
+                    <ul class="column" id="drumPattern2" muted="true">
+                		<div class="row">
+                            <li class="columnLabels"><p class="verticalLabels">EDIT</p></li>
+                            <li class="columnLabels"><p class="verticalLabels">FX</p></li>
+                            <li class="columnLabels"><p class="verticalLabels">MUTE</p></li>
+                            <li class="sliderColumnLabel"><p class="verticalLabels"> LOOP VOLUME</p></li>
+                            <li class="gridSpacer"><p class="verticalLabels">LOOP SEQUENCING</p></li>
+                        </div>
+                        <div class="row">
+                            <li><button id="switcher1" class="switcher"/> </li>
+                            <li><button id="aaD" class="dump aa"/> </li>
+                            <li class="mutePad"><button id="aaM" class="mute aa"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="aa0" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa1" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa2" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa3" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa4" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa5" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa6" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa7" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa8" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa9" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa10" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa11" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa12" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa13" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa14" class="punch aa"/> </li>
+                            <li class="punchPad"><button id="aa15" class="punch aa"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher2" class="switcher"/> </li>
+                            <li><button id="bbD" class="dump bb"/> </li>
+                            <li class="mutePad"><button id="bbM" class="mute bb"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="bb0" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb1" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb2" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb3" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb4" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb5" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb6" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb7" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb8" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb9" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb10" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb11" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb12" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb13" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb14" class="punch bb"/> </li>
+                            <li class="punchPad"><button id="bb15" class="punch bb"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher3" class="switcher"/> </li>
+                            <li><button id="ccD" class="dump cc"/> </li>
+                            <li class="mutePad"><button id="ccM" class="mute cc"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="cc0" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc1" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc2" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc3" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc4" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc5" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc6" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc7" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc8" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc9" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc10" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc11" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc12" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc13" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc14" class="punch cc"/> </li>
+                            <li class="punchPad"><button id="cc15" class="punch cc"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher4" class="switcher"/> </li>
+                            <li><button id="ddD" class="dump dd"/> </li>
+                            <li class="mutePad"><button id="ddM" class="mute dd"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="dd0" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd1" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd2" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd3" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd4" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd5" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd6" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd7" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd8" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd9" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd10" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd11" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd12" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd13" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd14" class="punch dd"/> </li>
+                            <li class="punchPad"><button id="dd15" class="punch dd"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher5" class="switcher"/> </li>
+                            <li><button id="eeD" class="dump ee"/> </li>
+                            <li class="mutePad"><button id="eeM" class="mute ee"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="ee0" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee1" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee2" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee3" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee4" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee5" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee6" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee7" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee8" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee9" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee10" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee11" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee12" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee13" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee14" class="punch ee"/> </li>
+                            <li class="punchPad"><button id="ee15" class="punch ee"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher6" class="switcher"/> </li>
+                            <li><button id="ffD" class="dump ff"/> </li>
+                            <li class="mutePad"><button id="ffM" class="mute ff"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="ff0" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff1" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff2" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff3" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff4" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff5" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff6" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff7" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff8" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff9" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff10" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff11" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff12" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff13" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff14" class="punch ff"/> </li>
+                            <li class="punchPad"><button id="ff15" class="punch ff"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher7" class="switcher"/> </li>
+                            <li><button id="ggD" class="dump gg"/> </li>
+                            <li class="mutePad"><button id="ggM" class="mute gg"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="gg0" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg1" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg2" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg3" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg4" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg5" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg6" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg7" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg8" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg9" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg10" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg11" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg12" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg13" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg14" class="punch gg"/> </li>
+                            <li class="punchPad"><button id="gg15" class="punch gg"/> </li>
+                        </div>
+                		<div class="row">
+                            <li><button id="switcher8" class="switcher"/> </li>
+                            <li><button id="hhD" class="dump hh"/> </li>
+                            <li class="mutePad"><button id="hhM" class="mute hh"/> </li>
+                            <li class="sliderPad"><input type="range" min="1" max="100" class="volume"/></li>
+                            <li class="punchPad"><button id="hh0" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh1" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh2" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh3" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh4" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh5" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh6" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh7" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh8" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh9" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh10" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh11" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh12" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh13" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh14" class="punch hh"/> </li>
+                            <li class="punchPad"><button id="hh15" class="punch hh"/> </li>
+                        </div>
+                        <div class="row">
+                            <li class="bpmLabelPad"><p id="tempoLabel" class="verticalLabels">TEMPO: 260.00bpm</p></li>
+                            <li class="bottomGridSpacer"><p class="verticalLabels"></p></li>
+                            <li class="bpmSliderPad"><input type="range" min="30" max="320" step=".01" value="260" class="bpm"/></li>
+                            <li class="bottomGridSpacer2"><p class="verticalLabels"></p></li>
+                        </div>
+                		<div class="row">
+                            <li class="columnLabels"><p class="verticalLabels"></p></li>
+                            <li class="columnLabels"><p class="verticalLabels">PLAY</p></li>
+                            <li class="columnLabels"><p class="verticalLabels"></p></li>
+                            <li class="tempoSliderColumnLabel"><p class="verticalLabels"></p></li>
+                            <li class="bottomGridSpacer"><p class="verticalLabels"></p></li>
+                        </div>
+                        <div class="row">
+                            <li class="playPad"><button id="playPause" class="playPause"/></li>
+                            <!--li class="sliderPad"><input type="range" min="0" max="1" step=".01" value=".5" class="swing"/></li-->
+                            <li class="bottomGridSpacer2"><p class="verticalLabels"></p></li>
+                        </div>
+                    </ul>
+            </div>
+        </div>
+  </body>
+</html>
